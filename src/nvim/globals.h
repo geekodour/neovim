@@ -1178,6 +1178,8 @@ EXTERN bool embedded_mode INIT(= false);
 // Dont try to start an user interface
 // or read/write to stdio (unless embedding)
 EXTERN bool headless_mode INIT(= false);
+// If nvim should start in remote mode [ -y <servername> ]
+EXTERN bool remote_mode INIT(= false);
 
 /// Used to track the status of external functions.
 /// Currently only used for iconv().

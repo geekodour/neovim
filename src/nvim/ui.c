@@ -120,6 +120,25 @@ static char uilog_last_event[1024] = { 0 };
 # include "ui_events_call.generated.h"
 #endif
 
+void ui_remote_start(char* servername)
+{
+#ifdef FEAT_TUI
+  tui_remote_start(servername); // pass the address here
+#else
+  fprintf(stderr, "Nvim headless-mode started.\n");
+  size_t len;
+  char **addrs = server_address_list(&len);
+  if (addrs != NULL) {
+    fprintf(stderr, "Listening on:\n");
+    for (size_t i = 0; i < len; i++) {
+      fprintf(stderr, "\t%s\n", addrs[i]);
+    }
+    xfree(addrs);
+  }
+  fprintf(stderr, "Press CTRL+C to exit.\n");
+#endif
+}
+
 void ui_builtin_start(void)
 {
 #ifdef FEAT_TUI

@@ -120,6 +120,12 @@ static bool cursor_style_enabled = false;
 # include "tui/tui.c.generated.h"
 #endif
 
+UI *tui_remote_start(char* servername)
+{
+  printf("%s",servername);
+  // get the remote ui
+  // use sockconnect
+}
 
 UI *tui_start(void)
 {

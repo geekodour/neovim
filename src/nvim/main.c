@@ -86,6 +86,7 @@ typedef struct {
   char        **argv;
 
   char *use_vimrc;                           // vimrc from -u argument
+  char *servername;                          // servername from -y argument
 
   int n_commands;                            /* no. of commands from + or -c */
   char *commands[MAX_ARG_CMDS];              // commands from + or -c arg
@@ -448,8 +449,16 @@ int main(int argc, char **argv)
 
   if (!headless_mode) {
     // Stop reading from input stream, the UI layer will take over now.
-    input_stop();
-    ui_builtin_start();
+
+    // Check if nvim is run using remote mode [ -y <servername>]
+    if(remote_mode){
+      input_stop();
+      ui_remote_start(params.servername); // pass the remote address here
+      // printf("%s",params.servername);
+    } else {
+      input_stop();
+      ui_builtin_start();
+    }
   }
 
   setmouse();  // may start using the mouse
@@ -1021,6 +1030,7 @@ static void command_line_scan(mparm_T *parmp)
         case 'S':                 /* "-S {file}" execute Vim script */
         case 'i':                 /* "-i {shada}" use for ShaDa file */
         case 'u':                 /* "-u {vimrc}" vim inits file */
+        case 'y':                 /* "-y {servername}" vim connects to remote nvim */
         case 'U':                 /* "-U {gvimrc}" gvim inits file */
         case 'W':                 /* "-W {scriptout}" overwrite */
           want_argument = TRUE;
@@ -1145,7 +1155,10 @@ scripterror:
               mch_exit(2);
             }
             break;
-
+          case 'y':                 /* "-y {servername}" vim connects to remote nvim */
+            remote_mode = true;
+            parmp->servername = argv[0];
+            break;
         }
       }
     }
@@ -1963,6 +1976,7 @@ static void usage(void)
   mch_msg(_("  -u <config>           Use this config file\n"));
   mch_msg(_("  -v, --version         Print version information\n"));
   mch_msg(_("  -V[N][file]           Verbose [level][file]\n"));
+  mch_msg(_("  -y <servername>       Connect this nvim instance to the remote servername\n"));
   mch_msg(_("  -Z                    Restricted mode\n"));
   mch_msg("\n");
   mch_msg(_("  --api-info            Write msgpack-encoded API metadata to stdout\n"));
