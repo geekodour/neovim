@@ -125,15 +125,12 @@ static bool cursor_style_enabled = false;
 
 UI *tui_remote_start(char* servername)
 {
-  printf("%s %d",servername, kChannelStreamSocket);
+  // connect to the remote UI
+  ILOG("%s %d",servername, kChannelStreamSocket);
   struct Channel* mychannel;
   //mychannel->streamtype = kChannelStreamSocket;
-  ILOG("***************");
   rpc_start(&mychannel);
-  ILOG("***************");
-
-  // get the remote ui
-  // use sockconnect
+  // setup handlers
 }
 
 UI *tui_start(void)
