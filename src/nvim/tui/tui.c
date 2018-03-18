@@ -40,6 +40,9 @@
 #include "nvim/syntax.h"
 #include "nvim/macros.h"
 
+#include "nvim/msgpack_rpc/channel.h"
+#include "nvim/channel.h"
+
 // Space reserved in two output buffers to make the cursor normal or invisible
 // when flushing. No existing terminal will require 32 bytes to do that.
 #define CNORM_COMMAND_MAX_SIZE 32
@@ -122,7 +125,13 @@ static bool cursor_style_enabled = false;
 
 UI *tui_remote_start(char* servername)
 {
-  printf("%s",servername);
+  printf("%s %d",servername, kChannelStreamSocket);
+  struct Channel* mychannel;
+  //mychannel->streamtype = kChannelStreamSocket;
+  ILOG("***************");
+  rpc_start(&mychannel);
+  ILOG("***************");
+
   // get the remote ui
   // use sockconnect
 }
