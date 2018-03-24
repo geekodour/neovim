@@ -1,0 +1,156 @@
+nvim/api/ui.c:  UIData *data = ui->data;
+nvim/api/ui.c:  xfree(ui->data);
+nvim/api/ui.c:  ui->data = NULL;  // Flag UI as "stopped".
+nvim/api/ui.c:  ui->width = (int)width;
+nvim/api/ui.c:  ui->height = (int)height;
+nvim/api/ui.c:  ui->rgb = true;
+nvim/api/ui.c:  ui->resize = remote_ui_resize;
+nvim/api/ui.c:  ui->clear = remote_ui_clear;
+nvim/api/ui.c:  ui->eol_clear = remote_ui_eol_clear;
+nvim/api/ui.c:  ui->cursor_goto = remote_ui_cursor_goto;
+nvim/api/ui.c:  ui->mode_info_set = remote_ui_mode_info_set;
+nvim/api/ui.c:  ui->update_menu = remote_ui_update_menu;
+nvim/api/ui.c:  ui->busy_start = remote_ui_busy_start;
+nvim/api/ui.c:  ui->busy_stop = remote_ui_busy_stop;
+nvim/api/ui.c:  ui->mouse_on = remote_ui_mouse_on;
+nvim/api/ui.c:  ui->mouse_off = remote_ui_mouse_off;
+nvim/api/ui.c:  ui->mode_change = remote_ui_mode_change;
+nvim/api/ui.c:  ui->set_scroll_region = remote_ui_set_scroll_region;
+nvim/api/ui.c:  ui->scroll = remote_ui_scroll;
+nvim/api/ui.c:  ui->highlight_set = remote_ui_highlight_set;
+nvim/api/ui.c:  ui->put = remote_ui_put;
+nvim/api/ui.c:  ui->bell = remote_ui_bell;
+nvim/api/ui.c:  ui->visual_bell = remote_ui_visual_bell;
+nvim/api/ui.c:  ui->default_colors_set = remote_ui_default_colors_set;
+nvim/api/ui.c:  ui->update_fg = remote_ui_update_fg;
+nvim/api/ui.c:  ui->update_bg = remote_ui_update_bg;
+nvim/api/ui.c:  ui->update_sp = remote_ui_update_sp;
+nvim/api/ui.c:  ui->flush = remote_ui_flush;
+nvim/api/ui.c:  ui->suspend = remote_ui_suspend;
+nvim/api/ui.c:  ui->set_title = remote_ui_set_title;
+nvim/api/ui.c:  ui->set_icon = remote_ui_set_icon;
+nvim/api/ui.c:  ui->option_set = remote_ui_option_set;
+nvim/api/ui.c:  ui->event = remote_ui_event;
+nvim/api/ui.c:  memset(ui->ui_ext, 0, sizeof(ui->ui_ext));
+nvim/api/ui.c:  ui->data = data;
+nvim/api/ui.c:  ui->width = (int)width;
+nvim/api/ui.c:  ui->height = (int)height;
+nvim/api/ui.c:    ui->rgb = value.data.boolean;
+nvim/api/ui.c:      ui->ui_ext[i] = value.data.boolean;
+nvim/api/ui.c:    ui->ui_ext[kUIPopupmenu] = value.data.boolean;
+nvim/api/ui.c:  UIData *data = ui->data;
+nvim/api/ui.c:  Dictionary hl = hlattrs2dict(&attrs, ui->rgb);
+nvim/api/ui.c:  UIData *data = ui->data;
+nvim/generators/gen_api_ui_events.lua:      bridge_output:write('  ui->'..ev.name..'(ui'..recv_argv..');\n')
+nvim/po/fr.po:#      traduisibles pour traduire celui-ci.
+nvim/tui/tui.c:  // implement ui-grid part
+nvim/tui/tui.c:  // implement ui-global part
+nvim/tui/tui.c:  //memset(ui->ui_ext, 0, sizeof(ui->ui_ext));
+nvim/tui/tui.c:  ui->stop = tui_stop;
+nvim/tui/tui.c:  ui->resize = tui_resize;
+nvim/tui/tui.c:  ui->clear = tui_clear;
+nvim/tui/tui.c:  ui->eol_clear = tui_eol_clear;
+nvim/tui/tui.c:  ui->cursor_goto = tui_cursor_goto;
+nvim/tui/tui.c:  ui->mode_info_set = tui_mode_info_set;
+nvim/tui/tui.c:  ui->update_menu = tui_update_menu;
+nvim/tui/tui.c:  ui->busy_start = tui_busy_start;
+nvim/tui/tui.c:  ui->busy_stop = tui_busy_stop;
+nvim/tui/tui.c:  ui->mouse_on = tui_mouse_on;
+nvim/tui/tui.c:  ui->mouse_off = tui_mouse_off;
+nvim/tui/tui.c:  ui->mode_change = tui_mode_change;
+nvim/tui/tui.c:  ui->set_scroll_region = tui_set_scroll_region;
+nvim/tui/tui.c:  ui->scroll = tui_scroll;
+nvim/tui/tui.c:  ui->highlight_set = tui_highlight_set;
+nvim/tui/tui.c:  ui->put = tui_put;
+nvim/tui/tui.c:  ui->bell = tui_bell;
+nvim/tui/tui.c:  ui->visual_bell = tui_visual_bell;
+nvim/tui/tui.c:  ui->default_colors_set = tui_default_colors_set;
+nvim/tui/tui.c:  ui->flush = tui_flush;
+nvim/tui/tui.c:  ui->suspend = tui_suspend;
+nvim/tui/tui.c:  ui->set_title = tui_set_title;
+nvim/tui/tui.c:  ui->set_icon = tui_set_icon;
+nvim/tui/tui.c:  ui->option_set= tui_option_set;
+nvim/tui/tui.c:  memset(ui->ui_ext, 0, sizeof(ui->ui_ext));
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  ui->data = NULL;
+nvim/tui/tui.c:  return ui->data == NULL;
+nvim/tui/tui.c:  ui->data = data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  if (!attrs_differ(attrs, data->print_attrs, ui->rgb)) {
+nvim/tui/tui.c:  int fg = ui->rgb ? attrs.rgb_fg_color : (attrs.cterm_fg_color - 1);
+nvim/tui/tui.c:    fg = ui->rgb ? grid->clear_attrs.rgb_fg_color
+nvim/tui/tui.c:  int bg = ui->rgb ? attrs.rgb_bg_color : (attrs.cterm_bg_color - 1);
+nvim/tui/tui.c:    bg = ui->rgb ? grid->clear_attrs.rgb_bg_color
+nvim/tui/tui.c:  int attr = ui->rgb ? attrs.rgb_ae_attr : attrs.cterm_ae_attr;
+nvim/tui/tui.c:  if (ui->rgb) {
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  if (grid->col == ui->width) {
+nvim/tui/tui.c:    if (grid->row < MIN(ui->height, grid->height - 1)) {
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:    if (attrs_differ(cell->attrs, data->print_attrs, ui->rgb)) {
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:        && (data->immediate_wrap_after_last_column || grid->col < ui->width)) {
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  bool nobg = ui->rgb ? grid->clear_attrs.rgb_bg_color == -1
+nvim/tui/tui.c:  if (nobg && right == ui->width -1) {
+nvim/tui/tui.c:      if (bot == ui->height - 1) {
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:        && ((grid->left == 0 && grid->right == ui->width - 1)
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  if (grid->left != 0 || grid->right != ui->width - 1) {
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:    UNIBI_SET_NUM_VAR(data->params[1], ui->height - 1);
+nvim/tui/tui.c:  if (grid->left != 0 || grid->right != ui->width - 1) {
+nvim/tui/tui.c:      UNIBI_SET_NUM_VAR(data->params[1], ui->width - 1);
+nvim/tui/tui.c:      UNIBI_SET_NUM_VAR(data->params[0], ui->width - 1);
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  ((TUIData *)ui->data)->busy = true;
+nvim/tui/tui.c:  ((TUIData *)ui->data)->busy = false;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  if (c.id != 0 && ui->rgb) {
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:    left == 0 && right == ui->width - 1
+nvim/tui/tui.c:    && top == 0 && bot == ui->height - 1;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  ((TUIData *)ui->data)->grid.attrs = attrs;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  UGrid *grid = &((TUIData *)ui->data)->grid;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:    ui->rgb = value.data.boolean;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  data->bridge->bridge.width = ui->width = width;
+nvim/tui/tui.c:  data->bridge->bridge.height = ui->height = height;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:    TUIData *data = ui->data; \
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/tui/tui.c:  TUIData *data = ui->data;
+nvim/ui_bridge.c:  rv->bridge.rgb = ui->rgb;
+nvim/ui_bridge.c:    rv->bridge.ui_ext[i] = ui->ui_ext[i];
+nvim/ui_bridge.c:  ui->stop(ui);
+nvim/ui_bridge.c:  ui->highlight_set(ui, *((HlAttrs *)argv[1]));
+nvim/ui_bridge.c:  ui->suspend(ui);
+nvim/ui.c:#define UI_CALL_MORE(method, ...) if (ui->method) ui->method(ui, __VA_ARGS__)
+nvim/ui.c:#define UI_CALL_ZERO(method) if (ui->method) ui->method(ui)
+nvim/ui.c:    width = MIN(ui->width, width);
+nvim/ui.c:    height = MIN(ui->height, height);
+nvim/ui.c:      ext_widgets[i] &= ui->ui_ext[i];
+nvim/ui.c:  UI_CALL(update_fg, (ui->rgb ? normal_fg : cterm_normal_fg_color - 1));
+nvim/ui.c:  UI_CALL(update_bg, (ui->rgb ? normal_bg : cterm_normal_bg_color - 1));
+nvim/ui.c:  UI_CALL(update_sp, (ui->rgb ? normal_sp : -1));

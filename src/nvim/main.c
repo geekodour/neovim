@@ -454,7 +454,6 @@ int main(int argc, char **argv)
     if(remote_mode){
       input_stop();
       ui_remote_start(params.servername); // pass the remote address here
-      // printf("%s",params.servername);
     } else {
       input_stop();
       ui_builtin_start();

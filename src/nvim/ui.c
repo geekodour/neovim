@@ -564,5 +564,5 @@ Array ui_array(void)
 
 UI* last_added_ui(void)
 {
-  return &uis[ui_count-1];
+  return uis[ui_count-1];
 }

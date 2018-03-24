@@ -137,30 +137,39 @@ UI *tui_remote_start(char* servername)
 
   // if (ERROR_SET(&error)) { --> cool stuff
 
-  //Array args = ARRAY_DICT_INIT;
-  //Error err = ERROR_INIT;
-  //Object result = rpc_send_call(id, "echo nvim_eval", args, &err);
-  //api_free_object(result);
+  Dictionary dic = ARRAY_DICT_INIT; Error* errr;
+  nvim_ui_attach(id, 20, 40, dic, errr);
 
-  // subscribe to redraw events
+  assert(ui_active());
 
-  Dictionary dic = ARRAY_DICT_INIT; // we can be specific here
-  Error* errr;
-  nvim_ui_attach(id, 20, 40, dic, errr); // adds our ui
-  printf("%d", ui_active()); // vefify added ui
   UI* ui = last_added_ui();
-  //ui->cursor_goto(ui,20,40); // from the client to the
-
-  // IMPLEMENT THE UI GRID PART FIRST
-  rpc_subscribe(id, "redraw");
-  // implement ui-grid part
-  // implement ui-global part
 
   // start the ui eventloop
 
+  ILOG("FUCKING SUBSCRIBING");
+  rpc_subscribe(id, "redraw");
+  ILOG("AFTER FUCKING SUBSCRIBING");
 
-  //memset(ui->ui_ext, 0, sizeof(ui->ui_ext));
-  //return ui_bridge_attach(ui, tui_main, tui_scheduler);
+  Array args = ARRAY_DICT_INIT;
+  Error err = ERROR_INIT;
+  ILOG("GEEEEET BUFFFER");
+  Object buf = rpc_send_call(id, "nvim_get_current_buf", args, &err);
+  ILOG("AFTER GEEEEET BUFFFER");
+
+  // handle internal notifications ( handle redraw )
+
+  // implement ui-grid part
+  // implement ui-global part
+
+  // No idea why the following results in a segfault, something with
+  // the multiqueue_put
+
+  // memset(ui->ui_ext, 0, sizeof(ui->ui_ext));
+  // return ui_bridge_attach(ui, tui_main, tui_scheduler);
+
+
+  // Add an option to notify client if the connection from the server is closed
+  // how to do that?
 }
 
 UI *tui_start(void)
