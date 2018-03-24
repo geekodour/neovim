@@ -25,6 +25,7 @@
 #include "nvim/memory.h"
 #include "nvim/option.h"
 #include "nvim/api/vim.h"
+#include "nvim/api/ui.h"
 #include "nvim/api/private/helpers.h"
 #include "nvim/event/loop.h"
 #include "nvim/event/signal.h"
@@ -125,12 +126,41 @@ static bool cursor_style_enabled = false;
 
 UI *tui_remote_start(char* servername)
 {
-  // connect to the remote UI
-  ILOG("%s %d",servername, kChannelStreamSocket);
-  struct Channel* mychannel;
-  //mychannel->streamtype = kChannelStreamSocket;
-  rpc_start(&mychannel);
-  // setup handlers
+  CallbackReader on_data = CALLBACK_READER_INIT;
+  const char *error = NULL;
+  uint64_t id = channel_connect(false, servername, true, on_data, 50, &error);
+
+  if(!id){
+    printf("Enter correct pipe address");
+    exit(0);
+  }
+
+  // if (ERROR_SET(&error)) { --> cool stuff
+
+  //Array args = ARRAY_DICT_INIT;
+  //Error err = ERROR_INIT;
+  //Object result = rpc_send_call(id, "echo nvim_eval", args, &err);
+  //api_free_object(result);
+
+  // subscribe to redraw events
+
+  Dictionary dic = ARRAY_DICT_INIT; // we can be specific here
+  Error* errr;
+  nvim_ui_attach(id, 20, 40, dic, errr); // adds our ui
+  printf("%d", ui_active()); // vefify added ui
+  UI* ui = last_added_ui();
+  //ui->cursor_goto(ui,20,40); // from the client to the
+
+  // IMPLEMENT THE UI GRID PART FIRST
+  rpc_subscribe(id, "redraw");
+  // implement ui-grid part
+  // implement ui-global part
+
+  // start the ui eventloop
+
+
+  //memset(ui->ui_ext, 0, sizeof(ui->ui_ext));
+  //return ui_bridge_attach(ui, tui_main, tui_scheduler);
 }
 
 UI *tui_start(void)

@@ -561,3 +561,8 @@ Array ui_array(void)
   }
   return all_uis;
 }
+
+UI* last_added_ui(void)
+{
+  return &uis[ui_count-1];
+}
