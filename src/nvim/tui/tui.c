@@ -147,21 +147,26 @@ UI *tui_remote_start(char* servername)
   Error err = ERROR_INIT;
   rpc_send_call(id, "nvim_set_current_line", args, &err);
 
+  // can use
+  // nvim_feedkeys(String keys, String mode, Boolean escape_csi) -> void
+  // nvim_get_current_buf() -> Buffer
+  // etc. from here.
+
   // subscribe to ui events, ui-grid part, ui-global part
-  rpc_subscribe(id, "redraw"); // how do i use this
+  rpc_subscribe(id, "redraw"); // how do i use this, this currently does nothing
 
   // start the ui eventloop
 
-  // while in the ui event loop handle internal notifications
+  // while in the ui event loop send internal notifications
   Array args2 = ARRAY_DICT_INIT;
   rpc_send_event_internal(id,"redraw", args2);
 
   // what about the main loop? (normal.c)
 
   // Passing the UI events to the tui system to actually show the UI
-
-  //memset(ui->ui_ext, 0, sizeof(ui->ui_ext));
-  //return ui_bridge_attach(ui, tui_main, tui_scheduler); // segfault, something with the multiqueue_put
+  // memset(ui->ui_ext, 0, sizeof(ui->ui_ext));
+  // return ui_bridge_attach(ui, tui_main, tui_scheduler);
+  // above two lines result in a segfault, something with the multiqueue_put
 }
 
 UI *tui_start(void)
