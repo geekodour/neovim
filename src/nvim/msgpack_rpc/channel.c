@@ -120,9 +120,19 @@ static Channel *find_rpc_channel(uint64_t id)
 /// @param name Event name (application-defined)
 /// @param args Array of event arguments
 /// @return True if the event was sent successfully, false otherwise.
-bool rpc_send_event_internal(const char *name, Array args)
+bool rpc_send_event_internal(uint64_t id, const char *name, Array args)
 {
-  broadcast_internal_event(name, args);
+  const String method = cstr_as_string((char *)name);
+
+  // Publish to INTERNAL notification handlers.
+  MsgpackRpcRequestHandler handler = rpc_get_notif_handler(method.data, method.size);
+
+  if (handler.fn != NULL) { handler.fn(id, args, NULL); }
+  else {
+    return false;
+  }
+
+  return true;
 }
 
 
@@ -505,16 +515,6 @@ static void send_event(Channel *channel,
                                            args,
                                            &out_buffer,
                                            1));
-}
-
-static void broadcast_internal_event(const char *name, Array args)
-{
-  const String method = cstr_as_string((char *)name);
-
-  // Publish to INTERNAL notification handlers.
-  MsgpackRpcRequestHandler handler = rpc_get_notif_handler(method.data, method.size);
-
-  if (handler.fn != NULL) { handler.fn(0, args, NULL); }
 }
 
 static void broadcast_event(const char *name, Array args)

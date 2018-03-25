@@ -453,7 +453,7 @@ int main(int argc, char **argv)
     // Check if nvim is run using remote mode [ -y <servername>]
     if(remote_mode){
       input_stop();
-      ui_remote_start(params.servername); // pass the remote address here
+      ui_remote_start(params.servername);
     } else {
       input_stop();
       ui_builtin_start();

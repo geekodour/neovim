@@ -1483,8 +1483,9 @@ Array nvim_list_uis(void)
 /// Logs the redraw event ( just for experimenting purposes )
 ///
 /// @return nothing
-void log_redraw_event(uint64_t channel_id, Array args, Error *error)
+Object log_redraw_event(uint64_t channel_id, Array args, Error *error)
   FUNC_API_SINCE(4)
 {
   printf("REDRAW EVENT AT CHANNEL %ld", channel_id);
+  return NIL;
 }

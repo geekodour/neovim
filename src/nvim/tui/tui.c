@@ -154,7 +154,7 @@ UI *tui_remote_start(char* servername)
 
   // while in the ui event loop handle internal notifications
   Array args2 = ARRAY_DICT_INIT;
-  rpc_send_event_internal("redraw", args2);
+  rpc_send_event_internal(id,"redraw", args2);
 
   // what about the main loop? (normal.c)
 
