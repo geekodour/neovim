@@ -167,6 +167,7 @@ UI *tui_remote_start(char* servername)
   // memset(ui->ui_ext, 0, sizeof(ui->ui_ext));
   // return ui_bridge_attach(ui, tui_main, tui_scheduler);
   // above two lines result in a segfault, something with the multiqueue_put
+  return ui; // does not do anything
 }
 
 UI *tui_start(void)
