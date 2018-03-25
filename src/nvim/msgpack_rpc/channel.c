@@ -114,6 +114,18 @@ static Channel *find_rpc_channel(uint64_t id)
   return chan;
 }
 
+
+/// Publishes an event to internal notification handlers.
+///
+/// @param name Event name (application-defined)
+/// @param args Array of event arguments
+/// @return True if the event was sent successfully, false otherwise.
+bool rpc_send_event_internal(const char *name, Array args)
+{
+  broadcast_internal_event(name, args);
+}
+
+
 /// Publishes an event to a channel.
 ///
 /// @param id Channel id. 0 means "broadcast to all subscribed channels"
@@ -131,7 +143,7 @@ bool rpc_send_event(uint64_t id, const char *name, Array args)
 
   if (channel) {
     send_event(channel, name, args);
-  }  else {
+  } else {
     broadcast_event(name, args);
   }
 
@@ -275,9 +287,7 @@ static void parse_msgpack(Channel *channel)
   while ((result = msgpack_unpacker_next(channel->rpc.unpacker, &unpacked)) ==
          MSGPACK_UNPACK_SUCCESS) {
     bool is_response = is_rpc_response(&unpacked.data);
-    ILOG("VERRRY COOOL**********");
     log_client_msg(channel->id, !is_response, unpacked.data);
-    ILOG("AFTER VERRRY COOOL**********");
 
     if (is_response) {
       if (is_valid_rpc_response(&unpacked.data, channel)) {
@@ -497,18 +507,21 @@ static void send_event(Channel *channel,
                                            1));
 }
 
-static void broadcast_event(const char *name, Array args)
+static void broadcast_internal_event(const char *name, Array args)
 {
-  kvec_t(Channel *) subscribed = KV_INITIAL_VALUE;
-  Channel *channel;
   const String method = cstr_as_string((char *)name);
 
   // Publish to INTERNAL notification handlers.
   MsgpackRpcRequestHandler handler = rpc_get_notif_handler(method.data, method.size);
 
-  if (handler.fn != NULL) {
-    handler.fn(0, args, NULL);
-  }
+  if (handler.fn != NULL) { handler.fn(0, args, NULL); }
+}
+
+static void broadcast_event(const char *name, Array args)
+{
+  kvec_t(Channel *) subscribed = KV_INITIAL_VALUE;
+  Channel *channel;
+  const String method = cstr_as_string((char *)name);
 
   // Publish to EXTERNAL notification handlers.
   map_foreach_value(channels, channel, {

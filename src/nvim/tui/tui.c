@@ -135,8 +135,6 @@ UI *tui_remote_start(char* servername)
     exit(0);
   }
 
-  // if (ERROR_SET(&error)) { --> cool stuff
-
   Dictionary dic = ARRAY_DICT_INIT; Error* errr;
   nvim_ui_attach(id, 20, 40, dic, errr);
 
@@ -144,32 +142,26 @@ UI *tui_remote_start(char* servername)
 
   UI* ui = last_added_ui();
 
+  Array args = ARRAY_DICT_INIT;
+  ADD(args, STRING_OBJ(cstr_to_string("this was sent from client nvim.")));
+  Error err = ERROR_INIT;
+  rpc_send_call(id, "nvim_set_current_line", args, &err);
+
+  // subscribe to ui events, ui-grid part, ui-global part
+  rpc_subscribe(id, "redraw"); // how do i use this
+
   // start the ui eventloop
 
-  ILOG("FUCKING SUBSCRIBING");
-  rpc_subscribe(id, "redraw");
-  ILOG("AFTER FUCKING SUBSCRIBING");
+  // while in the ui event loop handle internal notifications
+  Array args2 = ARRAY_DICT_INIT;
+  rpc_send_event_internal("redraw", args2);
 
-  Array args = ARRAY_DICT_INIT;
-  Error err = ERROR_INIT;
-  ILOG("GEEEEET BUFFFER");
-  Object buf = rpc_send_call(id, "nvim_get_current_buf", args, &err);
-  ILOG("AFTER GEEEEET BUFFFER");
+  // what about the main loop? (normal.c)
 
-  // handle internal notifications ( handle redraw )
+  // Passing the UI events to the tui system to actually show the UI
 
-  // implement ui-grid part
-  // implement ui-global part
-
-  // No idea why the following results in a segfault, something with
-  // the multiqueue_put
-
-  // memset(ui->ui_ext, 0, sizeof(ui->ui_ext));
-  // return ui_bridge_attach(ui, tui_main, tui_scheduler);
-
-
-  // Add an option to notify client if the connection from the server is closed
-  // how to do that?
+  //memset(ui->ui_ext, 0, sizeof(ui->ui_ext));
+  //return ui_bridge_attach(ui, tui_main, tui_scheduler); // segfault, something with the multiqueue_put
 }
 
 UI *tui_start(void)
