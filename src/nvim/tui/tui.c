@@ -119,6 +119,7 @@ typedef struct {
 
 static bool volatile got_winch = false;
 static bool cursor_style_enabled = false;
+static uint64_t rc_id;
 
 #ifdef INCLUDE_GENERATED_DECLARATIONS
 # include "tui/tui.c.generated.h"
@@ -128,9 +129,9 @@ void tui_remote_start(char* servername)
 {
   CallbackReader on_data = CALLBACK_READER_INIT;
   const char *error = NULL;
-  uint64_t id = channel_connect(false, servername, true, on_data, 50, &error);
+  rc_id = channel_connect(false, servername, true, on_data, 50, &error);
 
-  if(!id){
+  if(!rc_id){
     printf("Enter correct pipe address");
     exit(0);
   }
@@ -142,7 +143,7 @@ void tui_remote_start(char* servername)
   ADD(args, INTEGER_OBJ(20)); // width
   ADD(args, INTEGER_OBJ(200)); // height
   ADD(args, DICTIONARY_OBJ((Dictionary)ARRAY_DICT_INIT));
-  rpc_send_call(id, "nvim_ui_attach", args, &err);
+  rpc_send_call(rc_id, "nvim_ui_attach", args, &err);
 
 
   UI *ui = xcalloc(1, sizeof(UI));  // Freed by ui_bridge_stop().
@@ -1082,6 +1083,7 @@ static void tui_put(UI *ui, String text)
   TUIData *data = ui->data;
   UGrid *grid = &data->grid;
   UCell *cell;
+  printf("%s", text.data);
 
   cell = ugrid_put(&data->grid, (uint8_t *)text.data, text.size);
   // ugrid_put does not advance the cursor correctly, as the actual terminal
