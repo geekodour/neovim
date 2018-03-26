@@ -66,6 +66,7 @@ MsgpackRpcRequestHandler rpc_get_notif_handler(const char *name,
 
 void rpc_init(void)
 {
+  // add internal notification handlers
   notif_handlers = map_new(String, MsgpackRpcRequestHandler)();
   rpc_add_notif_handler((String) {
                          .data = "redraw",
@@ -365,14 +366,25 @@ static void handle_request(Channel *channel, msgpack_object *request)
   }
   // Retrieve the request handler
   MsgpackRpcRequestHandler handler;
-  //MsgpackRpcRequestHandler handler_internal;
+  MsgpackRpcRequestHandler handler_internal;
   msgpack_object *method = msgpack_rpc_method(request);
 
+ // ----
 
+
+  //if (handler.fn != NULL) { handler.fn(id, args, NULL); }
+  //else {
+  //  return false;
+  //}
+
+  //return true;
+
+ // ----
   if (method) {
     handler = msgpack_rpc_get_handler_for(method->via.bin.ptr,
                                           method->via.bin.size);
-    //handler_internal = rpc_get_notif_handler(method->via.bin.ptr, method->via.bin.size);
+    handler_internal = rpc_get_notif_handler(method->via.bin.ptr,
+                                          method->via.bin.size);
   } else {
     handler.fn = msgpack_rpc_handle_missing_method;
     handler.async = true;
@@ -381,9 +393,10 @@ static void handle_request(Channel *channel, msgpack_object *request)
   Array args = ARRAY_DICT_INIT;
   if (!msgpack_rpc_to_array(msgpack_rpc_args(request), &args)) {
     handler.fn = msgpack_rpc_handle_invalid_arguments;
-    //handler_internal.fn = msgpack_rpc_handle_invalid_arguments;
     handler.async = true;
-    //handler_internal.async = true;
+
+    handler_internal.fn = msgpack_rpc_handle_invalid_arguments;
+    handler_internal.async = true;
   }
 
   RequestEvent *evdata = xmalloc(sizeof(RequestEvent));
@@ -405,6 +418,9 @@ static void handle_request(Channel *channel, msgpack_object *request)
   } else {
     multiqueue_put(channel->events, on_request_event, 1, evdata);
   }
+
+  // checking here just
+  if (handler_internal.fn != NULL) { handler_internal.fn(23, args, NULL); }
 
   //RequestEvent *evdata_internal = xmalloc(sizeof(RequestEvent));
   //evdata_internal->channel = channel;
