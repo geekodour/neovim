@@ -135,29 +135,46 @@ void tui_remote_start(char* servername)
     exit(0);
   }
 
-  Array args0 = ARRAY_DICT_INIT;
-  ADD(args0, STRING_OBJ(cstr_to_string("this was sent from client nvim.")));
-  Error err = ERROR_INIT;
-  rpc_send_call(id, "nvim_set_current_line", args0, &err);
 
   // remote call to nvim_ui_attach
-  Array args1 = ARRAY_DICT_INIT;
-  ADD(args1, INTEGER_OBJ(20)); // width
-  ADD(args1, INTEGER_OBJ(200)); // height
-  ADD(args1, DICTIONARY_OBJ((Dictionary)ARRAY_DICT_INIT));
-  rpc_send_call(id, "nvim_ui_attach", args1, &err);
+  Array args = ARRAY_DICT_INIT;
+  Error err = ERROR_INIT;
+  ADD(args, INTEGER_OBJ(20)); // width
+  ADD(args, INTEGER_OBJ(200)); // height
+  ADD(args, DICTIONARY_OBJ((Dictionary)ARRAY_DICT_INIT));
+  rpc_send_call(id, "nvim_ui_attach", args, &err);
 
-  // can use
-  // nvim_feedkeys(String keys, String mode, Boolean escape_csi) -> void
-  // nvim_get_current_buf() -> Buffer
-  // etc. from here.
 
-  // start the ui eventloop
+  UI *ui = xcalloc(1, sizeof(UI));  // Freed by ui_bridge_stop().
+  ui->stop = tui_stop;
+  ui->resize = tui_resize;
+  ui->clear = tui_clear;
+  ui->eol_clear = tui_eol_clear;
+  ui->cursor_goto = tui_cursor_goto;
+  ui->mode_info_set = tui_mode_info_set;
+  ui->update_menu = tui_update_menu;
+  ui->busy_start = tui_busy_start;
+  ui->busy_stop = tui_busy_stop;
+  ui->mouse_on = tui_mouse_on;
+  ui->mouse_off = tui_mouse_off;
+  ui->mode_change = tui_mode_change;
+  ui->set_scroll_region = tui_set_scroll_region;
+  ui->scroll = tui_scroll;
+  ui->highlight_set = tui_highlight_set;
+  ui->put = tui_put;
+  ui->bell = tui_bell;
+  ui->visual_bell = tui_visual_bell;
+  ui->default_colors_set = tui_default_colors_set;
+  ui->flush = tui_flush;
+  ui->suspend = tui_suspend;
+  ui->set_title = tui_set_title;
+  ui->set_icon = tui_set_icon;
+  ui->option_set= tui_option_set;
 
-  // Passing the UI events to the tui system to actually show the UI
-  // memset(ui->ui_ext, 0, sizeof(ui->ui_ext));
-  // return ui_bridge_attach(ui, tui_main, tui_scheduler);
-  // above two lines result in a segfault, something with the multiqueue_put
+  memset(ui->ui_ext, 0, sizeof(ui->ui_ext));
+
+  ui_bridge_attach(ui, tui_main, tui_scheduler);
+
 }
 
 UI *tui_start(void)
@@ -1095,6 +1112,8 @@ static void tui_default_colors_set(UI *ui, Integer rgb_fg, Integer rgb_bg,
   grid->clear_attrs.cterm_fg_color = (int)cterm_fg;
   grid->clear_attrs.cterm_bg_color = (int)cterm_bg;
 }
+
+// static void tui_remote_flush(UI *ui) { }
 
 static void tui_flush(UI *ui)
 {
