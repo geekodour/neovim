@@ -1480,12 +1480,12 @@ Array nvim_list_uis(void)
 }
 
 
-/// Logs the redraw event ( just for experimenting purposes )
+/// Logs the redraw event size ( just for experimenting purposes )
 ///
 /// @return nothing
-Object log_redraw_event(uint64_t channel_id, Array args, Error *error)
+Object log_redraw_event(Array redraw_updates)
   FUNC_API_SINCE(4)
 {
-  printf("REDRAW EVENT AT CHANNEL %ld", channel_id);
+  printf("redraw event size %ld\n", redraw_updates.size);
   return NIL;
 }

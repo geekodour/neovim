@@ -369,17 +369,6 @@ static void handle_request(Channel *channel, msgpack_object *request)
   MsgpackRpcRequestHandler handler_internal;
   msgpack_object *method = msgpack_rpc_method(request);
 
- // ----
-
-
-  //if (handler.fn != NULL) { handler.fn(id, args, NULL); }
-  //else {
-  //  return false;
-  //}
-
-  //return true;
-
- // ----
   if (method) {
     handler = msgpack_rpc_get_handler_for(method->via.bin.ptr,
                                           method->via.bin.size);
@@ -419,28 +408,13 @@ static void handle_request(Channel *channel, msgpack_object *request)
     multiqueue_put(channel->events, on_request_event, 1, evdata);
   }
 
-  // checking here just
-  if (handler_internal.fn != NULL) { handler_internal.fn(23, args, NULL); }
+  // Invoke handler function if exists
+  if (handler_internal.fn != NULL) {
+    Array events_arr;
+    msgpack_rpc_to_array(request, &events_arr);
+    handler_internal.fn(0, events_arr, NULL);
+  }
 
-  //RequestEvent *evdata_internal = xmalloc(sizeof(RequestEvent));
-  //evdata_internal->channel = channel;
-  //evdata_internal->handler = handler_internal;
-  //evdata_internal->args = args;
-  //evdata_internal->request_id = request_id;
-  //channel_incref(channel);
-  //if (handler_internal.async) {
-  //  bool is_get_mode = handler_internal.fn == handle_nvim_get_mode;
-
-  //  if (is_get_mode && !input_blocking()) {
-  //    // Defer the event to a special queue used by os/input.c. #6247
-  //    multiqueue_put(ch_before_blocking_events, on_request_event, 1, evdata);
-  //  } else {
-  //    // Invoke immediately.
-  //    on_request_event((void **)&evdata);
-  //  }
-  //} else {
-  //  multiqueue_put(channel->events, on_request_event, 1, evdata);
-  //}
 }
 
 static void on_request_event(void **argv)
