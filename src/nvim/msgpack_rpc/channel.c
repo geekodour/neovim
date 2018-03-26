@@ -365,11 +365,14 @@ static void handle_request(Channel *channel, msgpack_object *request)
   }
   // Retrieve the request handler
   MsgpackRpcRequestHandler handler;
+  //MsgpackRpcRequestHandler handler_internal;
   msgpack_object *method = msgpack_rpc_method(request);
+
 
   if (method) {
     handler = msgpack_rpc_get_handler_for(method->via.bin.ptr,
                                           method->via.bin.size);
+    //handler_internal = rpc_get_notif_handler(method->via.bin.ptr, method->via.bin.size);
   } else {
     handler.fn = msgpack_rpc_handle_missing_method;
     handler.async = true;
@@ -378,7 +381,9 @@ static void handle_request(Channel *channel, msgpack_object *request)
   Array args = ARRAY_DICT_INIT;
   if (!msgpack_rpc_to_array(msgpack_rpc_args(request), &args)) {
     handler.fn = msgpack_rpc_handle_invalid_arguments;
+    //handler_internal.fn = msgpack_rpc_handle_invalid_arguments;
     handler.async = true;
+    //handler_internal.async = true;
   }
 
   RequestEvent *evdata = xmalloc(sizeof(RequestEvent));
@@ -400,6 +405,26 @@ static void handle_request(Channel *channel, msgpack_object *request)
   } else {
     multiqueue_put(channel->events, on_request_event, 1, evdata);
   }
+
+  //RequestEvent *evdata_internal = xmalloc(sizeof(RequestEvent));
+  //evdata_internal->channel = channel;
+  //evdata_internal->handler = handler_internal;
+  //evdata_internal->args = args;
+  //evdata_internal->request_id = request_id;
+  //channel_incref(channel);
+  //if (handler_internal.async) {
+  //  bool is_get_mode = handler_internal.fn == handle_nvim_get_mode;
+
+  //  if (is_get_mode && !input_blocking()) {
+  //    // Defer the event to a special queue used by os/input.c. #6247
+  //    multiqueue_put(ch_before_blocking_events, on_request_event, 1, evdata);
+  //  } else {
+  //    // Invoke immediately.
+  //    on_request_event((void **)&evdata);
+  //  }
+  //} else {
+  //  multiqueue_put(channel->events, on_request_event, 1, evdata);
+  //}
 }
 
 static void on_request_event(void **argv)

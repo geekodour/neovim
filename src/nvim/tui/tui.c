@@ -134,18 +134,28 @@ UI *tui_remote_start(char* servername)
     printf("Enter correct pipe address");
     exit(0);
   }
+  printf("%ld",id);
 
-  Dictionary dic = ARRAY_DICT_INIT; Error* errr;
-  nvim_ui_attach(id, 20, 40, dic, errr);
+  // Dictionary dic = ARRAY_DICT_INIT; Error* errr;
+  // nvim_ui_attach(id, 20, 40, dic, errr);
 
-  assert(ui_active());
 
-  UI* ui = last_added_ui();
+  // UI* ui = last_added_ui();
 
-  Array args = ARRAY_DICT_INIT;
-  ADD(args, STRING_OBJ(cstr_to_string("this was sent from client nvim.")));
+  Array args0 = ARRAY_DICT_INIT;
+  ADD(args0, STRING_OBJ(cstr_to_string("this was sent from client nvim.")));
   Error err = ERROR_INIT;
-  rpc_send_call(id, "nvim_set_current_line", args, &err);
+  rpc_send_call(id, "nvim_set_current_line", args0, &err);
+
+  // remote call to nvim_ui_attach
+  Array args1 = ARRAY_DICT_INIT;
+  ADD(args1, INTEGER_OBJ(20));
+  ADD(args1, INTEGER_OBJ(200));
+  ADD(args1, DICTIONARY_OBJ((Dictionary)ARRAY_DICT_INIT));
+  rpc_send_call(id, "nvim_ui_attach", args1, &err);
+
+  //assert(ui_active());
+  //nvim_ui_attach(Integer width, Integer height, Dictionary options) -> void
 
   // can use
   // nvim_feedkeys(String keys, String mode, Boolean escape_csi) -> void
@@ -153,13 +163,13 @@ UI *tui_remote_start(char* servername)
   // etc. from here.
 
   // subscribe to ui events, ui-grid part, ui-global part
-  rpc_subscribe(id, "redraw"); // how do i use this, this currently does nothing
+  // rpc_subscribe(id, "redraw"); // how do i use this, this currently does nothing
 
   // start the ui eventloop
 
   // while in the ui event loop send internal notifications
-  Array args2 = ARRAY_DICT_INIT;
-  rpc_send_event_internal(id,"redraw", args2);
+  // Array args2 = ARRAY_DICT_INIT;
+  // rpc_send_event_internal(id,"redraw", args2);
 
   // what about the main loop? (normal.c)
 
@@ -167,7 +177,7 @@ UI *tui_remote_start(char* servername)
   // memset(ui->ui_ext, 0, sizeof(ui->ui_ext));
   // return ui_bridge_attach(ui, tui_main, tui_scheduler);
   // above two lines result in a segfault, something with the multiqueue_put
-  return ui; // does not do anything
+  //return ui; // does not do anything
 }
 
 UI *tui_start(void)
