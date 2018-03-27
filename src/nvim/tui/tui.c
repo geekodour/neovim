@@ -131,22 +131,20 @@ void tui_remote_start(char* servername)
   uint64_t rc_id = channel_connect(false, servername, true, on_data, 50, &error);
   set_rc_id(rc_id);
 
-
   if(!rc_id){
     printf("Enter correct pipe address");
     exit(0);
   }
 
-
   // remote call to nvim_ui_attach
   Array args = ARRAY_DICT_INIT;
   Error err = ERROR_INIT;
-  ADD(args, INTEGER_OBJ(20)); // width
-  ADD(args, INTEGER_OBJ(200)); // height
+  ADD(args, INTEGER_OBJ(20));
+  ADD(args, INTEGER_OBJ(200));
   ADD(args, DICTIONARY_OBJ((Dictionary)ARRAY_DICT_INIT));
   rpc_send_call(rc_id, "nvim_ui_attach", args, &err);
 
-
+  // just do whatever tui_start does for now, could even call tui_start() here.
   UI *ui = xcalloc(1, sizeof(UI));  // Freed by ui_bridge_stop().
   ui->stop = tui_stop;
   ui->resize = tui_resize;

@@ -1486,6 +1486,6 @@ Array nvim_list_uis(void)
 Object log_redraw_event(Array redraw_updates)
   FUNC_API_SINCE(4)
 {
-  printf("redraw event size %ld\n", redraw_updates.size);
+  //printf("redraw event size %ld\n", redraw_updates.size);
   return NIL;
 }

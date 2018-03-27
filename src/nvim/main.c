@@ -127,7 +127,7 @@ typedef struct {
 Loop main_loop;
 
 static char *argv0 = NULL;
-static uint64_t rc_id; // remote channel id for remote tui
+static uint64_t rc_id = 0; // remote channel id for remote tui
 
 // Error messages
 static const char *err_arg_missing = N_("Argument missing after");

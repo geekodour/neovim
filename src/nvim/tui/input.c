@@ -12,6 +12,7 @@
 #include "nvim/os/os.h"
 #include "nvim/os/input.h"
 #include "nvim/event/rstream.h"
+#include "nvim/msgpack_rpc/channel.h"
 
 #define PASTETOGGLE_KEY "<Paste>"
 #define KEY_BUFFER_SIZE 0xfff
@@ -95,7 +96,7 @@ static void wait_input_enqueue(void **argv)
       Array args = ARRAY_DICT_INIT;
       Error err = ERROR_INIT;
       ADD(args, STRING_OBJ(((String){.data = buf, .size = len })));
-      //rpc_send_call(rc_id, "nvim_input", args, &err);
+      rpc_send_call(rc_id, "nvim_input", args, &err);
     }
     size_t consumed = input_enqueue((String){.data = buf, .size = len});
     if (consumed) {
