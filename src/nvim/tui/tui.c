@@ -119,7 +119,6 @@ typedef struct {
 
 static bool volatile got_winch = false;
 static bool cursor_style_enabled = false;
-static uint64_t rc_id;
 
 #ifdef INCLUDE_GENERATED_DECLARATIONS
 # include "tui/tui.c.generated.h"
@@ -129,7 +128,9 @@ void tui_remote_start(char* servername)
 {
   CallbackReader on_data = CALLBACK_READER_INIT;
   const char *error = NULL;
-  rc_id = channel_connect(false, servername, true, on_data, 50, &error);
+  uint64_t rc_id = channel_connect(false, servername, true, on_data, 50, &error);
+  set_rc_id(rc_id);
+
 
   if(!rc_id){
     printf("Enter correct pipe address");
@@ -1083,8 +1084,6 @@ static void tui_put(UI *ui, String text)
   TUIData *data = ui->data;
   UGrid *grid = &data->grid;
   UCell *cell;
-  printf("%s", text.data);
-
   cell = ugrid_put(&data->grid, (uint8_t *)text.data, text.size);
   // ugrid_put does not advance the cursor correctly, as the actual terminal
   // will when we print.  Its cursor motion model is simplistic and wrong.  So

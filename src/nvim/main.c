@@ -127,6 +127,7 @@ typedef struct {
 Loop main_loop;
 
 static char *argv0 = NULL;
+static uint64_t rc_id; // remote channel id for remote tui
 
 // Error messages
 static const char *err_arg_missing = N_("Argument missing after");
@@ -2001,3 +2002,9 @@ static void check_swap_exists_action(void)
     getout(1);
   handle_swap_exists(NULL);
 }
+
+/*
+ * Getter and Setter for the remote channel id for remote tui (experiment)
+ */
+uint64_t get_rc_id(void) { return rc_id; }
+void set_rc_id(uint64_t id) { rc_id = id; }

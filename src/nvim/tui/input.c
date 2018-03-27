@@ -87,8 +87,16 @@ static void input_done_event(void **argv)
 
 static void wait_input_enqueue(void **argv)
 {
+
   TermInput *input = argv[0];
   RBUFFER_UNTIL_EMPTY(input->key_buffer, buf, len) {
+    uint64_t rc_id = get_rc_id();
+    if(rc_id){
+      Array args = ARRAY_DICT_INIT;
+      Error err = ERROR_INIT;
+      ADD(args, STRING_OBJ(((String){.data = buf, .size = len })));
+      //rpc_send_call(rc_id, "nvim_input", args, &err);
+    }
     size_t consumed = input_enqueue((String){.data = buf, .size = len});
     if (consumed) {
       rbuffer_consumed(input->key_buffer, consumed);
